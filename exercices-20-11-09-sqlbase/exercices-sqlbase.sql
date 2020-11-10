@@ -1,5 +1,5 @@
 
--- 3. Créer une base de données ‘netflix’ 
+-- 3. Create a "netflix" database 
 
 
 CREATE DATABASE netflix;
@@ -7,7 +7,7 @@ CREATE DATABASE netflix;
 USE netflix;
 
 
--- 4. Créer une table appelée ‘netflix_title’, importer les données provenant du fichier netflix_titles.csv 
+-- 4. Create a table called "netflix_title", import the data from the netflix_titles.csv file
 
 
 CREATE TABLE netflix_title (
@@ -33,7 +33,7 @@ IGNORE 1 ROWS
 ;
 
 
--- 5. Créer une table appelée ‘netflix_shows’ provenant du fichier Netflix Shows.csv Avec la table netflix_titles 
+-- 5. Create a table called 'netflix_shows' from the Netflix Shows.csv file With the netflix_titles table
 
 
 CREATE TABLE netflix_shows(
@@ -56,7 +56,7 @@ IGNORE 1 ROWS
 ;
 
 
--- 6. Afficher tous les titres de films de la table netflix_titles dont l’ID est inférieur strict à 80000000 
+-- 6. Show all movie titles from the netflix_titles table whose ID is strict less than 80,000,000
 
 
 SELECT TITLE
@@ -64,7 +64,7 @@ FROM NETFLIX_TITLE
 WHERE SHOW_ID < 80000000
 
 
--- 7. Afficher toutes les durée des TV Show 
+-- 7. Show all TV Show times
 
 
 SELECT title, duration
@@ -72,7 +72,7 @@ FROM netflix_title
 WHERE TYPE = "TV SHOW"
 
 
--- 9. Afficher tous les noms de films communs aux 2 tables (netflix_titles et netflix_shows) 
+-- 9. Display all the movie names common to the 2 tables (netflix_titles and netflix_shows)
 
 SELECT ns.title
 FROM netflix_shows ns
@@ -82,30 +82,32 @@ GROUP BY title
 ORDER BY title
 ;
 
--- 10. Calculer la durée totale de tous les TV Show de votre table netflix_titles 
+-- 10. Calculate the total duration of all the TV Shows in your netflix_titles table
 
 SELECT SUM(duration)
 FROM netflix_title NT
 WHERE type = "movie"
 ;
 
--- 11. Compter le nombre de TV Shows de votre table ‘netflix_shows’ dont le ‘ratingLevel’ est renseigné. 
+-- 11. Count the number of TV Shows in your "netflix_shows" table for which the "ratingLevel" is entered.
 
 SELECT count(title)
 FROM netflix_shows       
-WHERE rating_level IS NOT NULL # Si on a pas preciser not null dans la creation
+WHERE rating_level IS NOT NULL # If we did not specify not null in the creation
 
 -- OR
 
 SELECT count(title)
 FROM netflix_shows
-WHERE rating_level NOT IN    # Si on a preciser not null dans la creation
+WHERE rating_level NOT IN    # If we specify not null in the creation
 	(SELECT rating_level 
 	FROM netflix_shows 
 	WHERE rating_level = "")
 ;
 
--- 12. Compter les films et TV Shows pour lesquels les noms (title) sont les mêmes sur les 2 tables et dont le ‘release year’ est supérieur à 2016.
+
+-- 12. Count the films and TV Shows for which the names (title) are the same on the 2 tables and whose ‘release year’ is greater than 2016
+
 
 SELECT count(ns.title)
 FROM netflix_shows ns
@@ -113,31 +115,32 @@ INNER JOIN netflix_title nt
 ON ns.title = nt.title
 WHERE nt.release_year > 2016
 
--- 13. Supprimer la colonne ‘rating’ de votre table ‘netflix_shows’ 
+-- 13. Delete the "rating" column from your "netflix_shows" table
 
 ALTER TABLE netflix.netflix_shows DROP COLUMN rating;
 
--- 14. Supprimer les 100 dernières lignes de la table ‘netflix_shows’ 
+-- 14. Delete the last 100 rows of the 'netflix_shows' table
 
 DELETE FROM netflix_shows
 ORDER BY id DESC LIMIT 100
 
--- 15. Le champs “ratingLevel” pour le TV show “Marvel's Iron Fist” de la table ‘netflix_shows’ est vide, pouvez-vous ajouter un commentaire ? 
+-- 15. The “ratingLevel” field for the TV show “Marvel's Iron Fist” in the ‘netflix_shows’ table is empty, can you add a comment?
+
 
 UPDATE netflix_shows
 SET rating_level = "Ceci est un commentaire :)"
 WHERE title = "Marvel's Iron Fist"
 
 /*
--- 17. Modéliser (Merise) votre Base de données netflix. Que pouvez-vous dire de cette modélisation ?
+-- 17. Model (Merise) your netflix database. What can you say about this modeling?
 
 
-Voir mcd_sqlbase.jpg
-	 mld_sqlbase.md
+See mcd_sqlbase.jpg
+mld_sqlbase.md
 
-Notre base ne contient que deux table, cependant on constate que Netflix_shows depend de Netflix_Title,
-donc la Primary Key de Netflix_Title (title) se retrouve en temps que Foreign Key dans Netflix_Shows.
-Il aurait été bien de mettre Show_ID dans les deux tables, les clefs serait bien plus logique vu que Netflix_Show
-possède des doublons au niveau des titres.
+Our database only contains two tables, however we see that Netflix_shows depends on Netflix_Title,
+therefore the Primary Key of Netflix_Title (title) is found as Foreign Key in Netflix_Shows.
+It would have been nice to put Show_ID in both tables, the keys would be much more logical since Netflix_Show
+has duplicate titles.
 
 */
