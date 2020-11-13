@@ -1,1 +1,2 @@
-# devia-SQLTraining
+Basic SQL exercise
+Relational database
