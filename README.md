@@ -1,2 +1,1 @@
-Basic SQL exercise
-Relational database
+Basic SQL exercise - Relational database
